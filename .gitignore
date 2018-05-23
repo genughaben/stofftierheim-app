@@ -1,0 +1,8 @@
+.DS_Store
+.ipynb_checkpoints/
+__pycache__/
+darknet/
+auzuretest.ipynb
+main.pyc
+upanddown.py
+yolov3.weights

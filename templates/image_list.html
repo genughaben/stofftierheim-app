@@ -1,0 +1,20 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-http-equiv="X-UA-Compatible" content='ie=edge'>
+  <title>Eingang: Stofftierheim</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+</head>
+<body>
+
+  <h3>Bilderliste des Stofftierheims</h3>
+  <div>
+    <ul>
+      {% for image in image_list | reverse %}
+      <li>{{image}}</li>
+        {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>
