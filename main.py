@@ -71,7 +71,7 @@ def secret_page():
     local_path = os.getcwd()
     file = get_newest_file(block_blob_service)
     file_fullname = file.name
-    file_date = file.properties.last_modified.strftime("%Y-%m-%d")
+    file_date = file.properties.last_modified.strftime('%Y-%m-%d %H:%M:%S')
     file_name = os.path.splitext(file_fullname)[0]
     full_path_to_file = os.path.join(local_path, 'static/images/'+file_name+'.jpg')
     if os.path.isfile(full_path_to_file):
