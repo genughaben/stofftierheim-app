@@ -1,8 +1,6 @@
 import os, sys
 from functools import wraps
 from flask import request, Response, Flask, redirect, render_template as render
-from azure.storage.blob import BlockBlobService
-
 ## ** ##
 #
 # This is the highly appreciated software code of the Stofftierheim Company (TM).
@@ -11,9 +9,9 @@ from azure.storage.blob import BlockBlobService
 
 app = Flask(__name__)
 
-account_name = os.getenv('AZURE_ACCOUNT_NAME')
-account_key = os.getenv('AZURE_ACCOUNT_KEY')
-container_name = 'genughabenpi'
+account_name = os.getenv('NEXTCLOUD_USERNAME')
+account_key = os.getenv('NEXTCLOUD_PASSWORD')
+account_path = os.getenv('NEXTCLOUD_PATH')
 
 stofftierheim_login = os.getenv('STOFFTIERHEIM_LOGIN')
 stofftierheim_password = os.getenv('STOFFTIERHEIM_PASSWORD')
@@ -44,45 +42,17 @@ def requires_auth(f):
 def home():
     return render('home.html')
 
-def get_blob_list(block_blob_service):
-    generator = block_blob_service.list_blobs(container_name)
-    blob_names = []
-    dates = []
-    for blob in generator:
-        blob_names.append(blob.name)
-        dates.append(blob.properties.properties.last_modified)
-    return blob_names, dates
-
-def get_newest_file(block_blob_service):
-    generator = block_blob_service.list_blobs(container_name)
-    return generator.items.pop()
-
-@app.route('/image_list')
-@requires_auth
-def image_list():
-    block_blob_service = BlockBlobService(account_name=account_name, account_key=account_key)
-    blob_list, dates = get_blob_list(block_blob_service)
-    return render('image_list.html', image_list=blob_list, dates=dates)
-
 @app.route('/secret_page')
 @requires_auth
 def secret_page():
-    block_blob_service = BlockBlobService(account_name=account_name, account_key=account_key)
     local_path = os.getcwd()
-    file = get_newest_file(block_blob_service)
-    file_fullname = file.name
-    file_date = file.properties.last_modified.strftime('%Y-%m-%d %H:%M:%S')
-    file_name = os.path.splitext(file_fullname)[0]
-    full_path_to_file = os.path.join(local_path, 'static/images/'+file_name+'.jpg')
-    if os.path.isfile(full_path_to_file):
-        os.remove(full_path_to_file)
-
-    block_blob_service.get_blob_to_path(container_name, file_fullname, full_path_to_file)
-
+    file_name="test"
+    image_date = "2019-01-01"
+       
     return render(
-        'secret_page.html',
+       'secret_page.html',
         file_name=file_name,
-        image_date=file_date,
+        image_date=image_date,
         next_image_path='fehlt noch',
         previous_image_path='fehlt noch',
         newest_image_path='fehlt noch'
