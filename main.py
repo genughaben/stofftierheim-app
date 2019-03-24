@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 account_name = os.getenv('NEXTCLOUD_USERNAME')
 account_key = os.getenv('NEXTCLOUD_PASSWORD')
-account_path = os.getenv('NEXTCLOUD_PATH')
+account_path = os.getenv('NEXTCLOUD_PATH_STOFF')
 
 stofftierheim_login = os.getenv('STOFFTIERHEIM_LOGIN')
 stofftierheim_password = os.getenv('STOFFTIERHEIM_PASSWORD')
@@ -55,6 +55,8 @@ def home():
 
 
 def get_youngest_file_from_nextcloud():
+    easywebdav.basestring = str
+    easywebdav.client.basestring = str
     parse_object = urlparse(account_path)
     domain = parse_object.netloc
     protocol = parse_object.scheme
@@ -76,7 +78,7 @@ def get_youngest_file_from_nextcloud():
         try:
             date = datetime.strptime(date_string, "%Y-%m-%d_%H-%M-%S")
             file_and_date[date] = file.name
-        except(e):
+        except:
             continue
 
     biggest_key = file_and_date.keys()
@@ -85,7 +87,7 @@ def get_youngest_file_from_nextcloud():
     youngest = max(dt for dt in file_and_date if dt < now)
     youngest_file_path = file_and_date[youngest]
     youngest_file_name = os.path.basename(youngest_file_path)
-    local_youngest_file_name = f'./static/images/current/{youngest_file_name}'
+    local_youngest_file_name = './static/images/current/'+youngest_file_name
     webdav.download(youngest_file_path, local_youngest_file_name)
     return youngest_file_name, youngest.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -94,7 +96,7 @@ def get_youngest_file_from_nextcloud():
 @requires_auth
 def secret_page():
     local_path = os.getcwd()
-    file_name, image_date = get_youngest_file_from_nextcloud()
+    [file_name, image_date] = get_youngest_file_from_nextcloud()
     return render(
         'secret_page.html',
         file_name=file_name,
