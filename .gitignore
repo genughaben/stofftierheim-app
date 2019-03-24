@@ -5,6 +5,7 @@ darknet/
 auzuretest.ipynb
 main.pyc
 upanddown.py
+*.pyc
 yolov3.weights
 .env
 venv/*
