@@ -83,6 +83,7 @@ def get_youngest_file_from_nextcloud():
 
     biggest_key = file_and_date.keys()
 
+    os.environ['TZ'] = 'Europe/Amsterdam'
     now = datetime.now()
     youngest = max(dt for dt in file_and_date if dt < now)
     youngest_file_path = file_and_date[youngest]
